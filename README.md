@@ -36,7 +36,7 @@ plt.plot(
 ax = plt.gca()
 ax.xaxis.set_major_locator(MaxNLocator(integer=True))
 plt.ylim(bottom=0)
-plt.title("Dividends + buybacks, and income")
+plt.title("AAPL income and dividends + buybacks")
 plt.xlabel("Fiscal Year")
 plt.ylabel("$ billions")
 plt.grid(True, alpha=0.7)
