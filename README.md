@@ -5,6 +5,12 @@ in dictionary or Pandas DataFrame format.
 
 Only supports 10-K reports.
 
+Installation:
+
+```bash
+pip install sec_company_facts
+```
+
 Example:
 
 ```py
