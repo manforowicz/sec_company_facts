@@ -9,7 +9,7 @@ _rate_limit_lock = threading.Lock()
 _last_request_time = 0.0
 
 
-def _wait_on_rate_limit():
+def _wait_on_rate_limit() -> None:
     """
     If necessary, waits to avoid exceeding global rate limit of
     of 1 request every 0.1 seconds.
@@ -25,6 +25,11 @@ def _wait_on_rate_limit():
 
 
 class CompanyFacts:
+    """
+    Company data downloaded from
+    data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json
+    """
+
     def __init__(self, data: dict):
         """
         Use `CompanyFacts.from_ticker()` or `CompanyFacts.from_cik()` to
@@ -34,7 +39,9 @@ class CompanyFacts:
         self.data: dict[str, dict[str, dict]] = data
 
     @classmethod
-    def from_ticker(cls, ticker: str, user_agent="Your Name (your@email.com)") -> Self:
+    def from_ticker(
+        cls, ticker: str, user_agent: str = "Your Name (your@email.com)"
+    ) -> Self:
         """
         From data.sec.gov returns a `CompanyFacts` for this ticker.
 
@@ -44,7 +51,7 @@ class CompanyFacts:
         return cls.from_cik(cik)
 
     @classmethod
-    def from_cik(cls, cik: str, user_agent="Your Name (your@email.com)") -> Self:
+    def from_cik(cls, cik: str, user_agent: str = "Your Name (your@email.com)") -> Self:
         """
         From data.sec.gov returns a `CompanyFacts` for this CIK.
 
@@ -142,7 +149,9 @@ class CompanyFacts:
         return list(self.data["facts"]["us-gaap"].keys())
 
 
-def get_cik_from_ticker(ticker: str, user_agent="Your Name (your@email.com)") -> str:
+def get_cik_from_ticker(
+    ticker: str, user_agent: str = "Your Name (your@email.com)"
+) -> str:
     """
     Uses sec.gov to determine the CIK of `ticker`.
 
