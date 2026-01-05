@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sec_company_facts"
+version = "0.1.0"
+description = "Fetch SEC company dataframes"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [
+  { name = "Marcin Anforowicz", email = "manforowicz@gmail.com" }
+]
+
+dependencies = ["pandas", "requests"]
+
+[project.urls]
+Homepage = "https://github.com/manforowicz/sec_company_facts"
