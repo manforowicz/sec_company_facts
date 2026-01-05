@@ -1,6 +1,6 @@
 # SEC Company Facts
 
-A minimal Python library for fetching annual 10-K company facts from data.sec.gov
+A minimal Python library for fetching yearly 10-K company facts from [data.sec.gov](https://data.sec.gov/)
 in dictionary or Pandas DataFrame format.
 
 Only supports 10-K reports.
@@ -9,6 +9,8 @@ Example:
 
 ```py
 from sec_company_facts import CompanyFacts
+from matplotlib.ticker import MaxNLocator
+import matplotlib.pyplot as plt
 
 company = CompanyFacts.from_ticker("AAPL")
 

@@ -1,17 +1,18 @@
 [build-system]
-requires = ["setuptools>=61"]
+requires = ["setuptools>=77"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "sec_company_facts"
 version = "0.1.0"
-description = "Fetch SEC company dataframes"
-readme = "README.md"
-requires-python = ">=3.11"
-license = { text = "MIT" }
 authors = [
   { name = "Marcin Anforowicz", email = "manforowicz@gmail.com" }
 ]
+description = "Fetch SEC 10-K company facts dataframes"
+readme = "README.md"
+requires-python = ">=3.11"
+license = "MIT"
+license-files = ["LICENSE.md"]
 
 dependencies = ["pandas", "requests"]
 
