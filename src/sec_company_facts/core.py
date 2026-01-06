@@ -1,3 +1,9 @@
+"""
+A minimal Python library for fetching yearly 10-K company facts from data.sec.gov in dictionary or Pandas DataFrame format.
+
+Only supports 10-K reports.
+"""
+
 import sys
 import threading
 import time
@@ -24,7 +30,7 @@ def _wait_on_rate_limit() -> None:
                 return
 
 
-class CompanyFacts:
+class Company:
     """
     Company data downloaded from
     data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json
@@ -32,18 +38,18 @@ class CompanyFacts:
 
     def __init__(self, data: dict):
         """
-        Use `CompanyFacts.from_ticker()` or `CompanyFacts.from_cik()` to
-        to create a `CompanyFacts` from SEC data.
+        Use `Company.from_ticker()` or `Company.from_cik()` to
+        to create a `Company` from SEC data.
         """
         # Dictionary from JSON downloaded from data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json
-        self.data: dict[str, dict[str, dict]] = data
+        self.data: dict = data
 
     @classmethod
     def from_ticker(
         cls, ticker: str, user_agent: str = "Your Name (your@email.com)"
     ) -> Self:
         """
-        From data.sec.gov returns a `CompanyFacts` for this ticker.
+        From data.sec.gov returns a `Company` for this ticker.
 
         This function is internally rate-limited to 1 request per 0.1 seconds.
         """
@@ -53,7 +59,7 @@ class CompanyFacts:
     @classmethod
     def from_cik(cls, cik: str, user_agent: str = "Your Name (your@email.com)") -> Self:
         """
-        From data.sec.gov returns a `CompanyFacts` for this CIK.
+        From data.sec.gov returns a `Company` for this CIK.
 
         This function is internally rate-limited to 1 request per 0.1 seconds.
         """
@@ -65,7 +71,7 @@ class CompanyFacts:
         data = response.json()
         return cls(data)
 
-    def get_yearly(self, tag: str | list[str]) -> dict[int, float]:
+    def get_yearly(self, tag: str | list[str]) -> dict[int, int]:
         """
         Returns a dictionary that maps from year to that year's `tag` value,
         for all available years.
@@ -148,6 +154,30 @@ class CompanyFacts:
         """
         return list(self.data["facts"]["us-gaap"].keys())
 
+    def get_entity_name(self) -> str:
+        """
+        Returns the name of the company.
+        """
+        return self.data["entityName"]
+
+    def get_cik(self) -> str:
+        """
+        Returns the CIK of the company.
+        """
+        return str(self.data["cik"])
+
+    def get_tag_label(self, tag: str) -> str:
+        """
+        Returns a human-readable label of the given `tag`.
+        """
+        return self.data["facts"]["us-gaap"][tag]["label"]
+
+    def get_tag_description(self, tag: str) -> str:
+        """
+        Returns a human-readable description of the given `tag`.
+        """
+        return self.data["facts"]["us-gaap"][tag]["description"]
+
 
 def get_cik_from_ticker(
     ticker: str, user_agent: str = "Your Name (your@email.com)"
@@ -168,7 +198,6 @@ def get_cik_from_ticker(
     # {"0": {"cik_str": 320193, "ticker": "AAPL", ... }, "1": ... }
     for entry in ticker_data.values():
         if entry["ticker"] == ticker:
-            # SEC CIKs must be 10 digits (padded with leading zeros)
-            return str(entry["cik_str"]).zfill(10)
+            return str(entry["cik_str"])
 
     raise RuntimeError(f"no ticker '{ticker}' found")
