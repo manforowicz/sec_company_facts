@@ -11,23 +11,23 @@ from typing import Self
 import requests
 import pandas as pd
 
-_rate_limit_lock = threading.Lock()
-_last_request_time = 0.0
+_next_allowed_time_lock = threading.Lock()
+_next_allowed_time = 0.0
+_INTERVAL = 0.1
 
 
 def _wait_on_rate_limit() -> None:
     """
-    If necessary, waits to avoid exceeding global rate limit of
+    If necessary, waits to avoid exceeding global rate limit
     of 1 request every 0.1 seconds.
     """
-    global _rate_limit_lock
-    global _last_request_time
-    while True:
-        now = time.time()
-        with _rate_limit_lock:
-            if _last_request_time + 0.1 < now:
-                _last_request_time = now
-                return
+    global _next_allowed_time
+
+    with _next_allowed_time_lock:
+        now = time.monotonic()
+        if now < _next_allowed_time:
+            time.sleep(_next_allowed_time - now)
+        _next_allowed_time = time.monotonic() + _INTERVAL
 
 
 class Company:
