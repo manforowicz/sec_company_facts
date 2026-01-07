@@ -14,7 +14,7 @@ license-files = ["LICENSE.md"]
 dependencies = ["pandas", "requests"]
 
 [project.optional-dependencies]
-test = ["pytest"]
+test = ["pytest", "pytest-cov"]
 
 [project.urls]
 Homepage = "https://github.com/manforowicz/sec_company_facts"

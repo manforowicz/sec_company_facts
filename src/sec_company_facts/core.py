@@ -34,6 +34,9 @@ class Company:
     """
     Company data downloaded from
     data.sec.gov/api/xbrl/companyfacts/CIK{cik}.json
+
+    Use `Company.from_ticker()` or `Company.from_cik()` to
+    to create a `Company` from SEC data.
     """
 
     def __init__(self, data: dict):
@@ -123,12 +126,11 @@ class Company:
         Each column contains its tag's values for available years.
         Missing entries are filled with 0.0.
 
-        Uses the `get_yearly()` method on each of the `tags` provided.
         Data taken from 10-K forms, with US-GAAP and USD units.
         Depending on company, the year may be calendar or financial.
 
         If an element of `tags` is a list, tries elements in order until an existing tag is found.
-        The DataFrame column's name will be the first element in the list.
+        The DataFrame column's name will always be the very first element in the list.
 
         The list of tags you can use is specified by `get_available_tags()`.
         """
